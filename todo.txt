@@ -1,0 +1,6 @@
+Fonctionnalités:
+- Refresh num lastRead quand click (besoin (A) & (B))
+- Indiquer quoi lire
+- lien vers site
+- Proptypes
+- revoir getMangas.then(getMangasStates) -> Si get mangas HS devrait fonctionner
