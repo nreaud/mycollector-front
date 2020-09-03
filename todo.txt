@@ -1,6 +1,10 @@
+Next time: load imgs from back (when back done)
+
 Fonctionnalités:
 - Refresh num lastRead quand click (besoin (A) & (B))
-- Indiquer quoi lire
+- Last Read input -> only on submit
 - lien vers site
 - Proptypes
-- revoir getMangas.then(getMangasStates) -> Si get mangas HS devrait fonctionner
+- Dockerfile
+- TUs
+- Genre Sonar

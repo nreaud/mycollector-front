@@ -1,6 +1,6 @@
 th,
 td {
-  font-size: 2em;
+  font-size: 32px;
   border: 1px solid #333;
 }
 
@@ -15,4 +15,10 @@ td {
 
 tr button {
   background-color: lightgreen;
+}
+
+.toReadLabel {
+  background-color: red;
+  color: white;
+  border-radius: 15%;
 }

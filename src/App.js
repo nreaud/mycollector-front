@@ -8,10 +8,16 @@ class App extends Component {
     this.state = {
       error: null,
       isLoaded: false,
-      mangas: [],
+      mangas: {},
+      mangaKeysSorted: [],
       mangaStates: {},
     };
   }
+
+  extractMangaKeysSorted = (mangaStates) => {
+    // => to bind to this
+    return Object.keys(mangaStates);
+  };
 
   componentDidMount() {
     axios
@@ -19,28 +25,25 @@ class App extends Component {
       .then((res) => res.data)
       .then(
         (result) => {
-          this.setState({
-            mangas: Object.keys(result).map((key) => result[key]),
-          });
+          this.setState({ mangas: result });
         },
-        // Remarque : il est important de traiter les erreurs ici
-        // au lieu d'utiliser un bloc catch(), pour ne pas passer à la trappe
-        // des exceptions provenant de réels bugs du composant.
         (error) => {
           this.setState({
             isLoaded: true,
-            error,
+            error: error,
           });
         }
       )
       .then(
         axios
-          .get("http://localhost:8080/mangaStates")
+          .get("http://localhost:8080/mangaStates?sort=TO_READ")
           .then((res) => res.data)
           .then(
             (result) => {
+              let mangaKeysSorted = this.extractMangaKeysSorted(result);
               this.setState({
                 isLoaded: true,
+                mangaKeysSorted: mangaKeysSorted,
                 mangaStates: result,
               });
             },
@@ -50,18 +53,21 @@ class App extends Component {
             (error) => {
               this.setState({
                 isLoaded: true,
-                error,
+                error: error,
               });
             }
           )
       );
   }
 
+  extractImgNameFromUrl(url) {}
+
   handleOnClick = (event) => {
+    // => to bind to this
     const { mangaStates } = this.state;
     const indexMangaClicked = event.target.value;
     const mangaStateClicked = mangaStates[indexMangaClicked];
-    console.log("Clicked");
+    console.log("Up to date manga:");
     console.log(mangaStateClicked);
     const manga = mangaStateClicked.manga;
     const lastRead = mangaStateClicked.lastAvailable;
@@ -70,12 +76,26 @@ class App extends Component {
     );
   };
 
+  onChangeLastRead = (event) => {
+    //Arrow to bind with 'this'
+    const lastRead = event.target.value;
+    const manga = event.target.getAttribute("manga");
+    console.log("manga attr");
+    console.log(manga);
+    console.log(manga + " last Read is " + lastRead);
+    axios.post(
+      "http://localhost:8080/mangaStates/" + manga + "/lastRead/" + lastRead
+    );
+  };
+
   render() {
-    const { error, isLoaded, mangas, mangaStates } = this.state;
-    console.log("=== Mangas ===");
-    console.log(mangas);
-    console.log("=== Manga States ===");
-    console.log(mangaStates);
+    const {
+      error,
+      isLoaded,
+      mangas,
+      mangaKeysSorted,
+      mangaStates,
+    } = this.state;
     if (error) {
       return <div>Erreur : {error.message}</div>;
     } else if (!isLoaded) {
@@ -85,8 +105,10 @@ class App extends Component {
         <div className="App">
           <Mangas
             mangas={mangas}
+            mangaKeysSorted={mangaKeysSorted}
             mangaStates={mangaStates}
             onClick={this.handleOnClick}
+            onChangeLastRead={this.onChangeLastRead}
           />
         </div>
       );
