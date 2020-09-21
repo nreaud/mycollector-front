@@ -30,7 +30,6 @@ class NumberScroller extends Component {
 
   render() {
     const { customAttrs, defaultValue, value } = this.state;
-    console.log(customAttrs);
     return (
       <input
         className="lastReadInput"

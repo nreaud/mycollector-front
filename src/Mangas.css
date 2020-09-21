@@ -22,3 +22,8 @@ tr button {
   color: white;
   border-radius: 15%;
 }
+
+img {
+  width: 350px;
+  height: 500px;
+}

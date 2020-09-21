@@ -7,6 +7,7 @@ const Mangas = ({
   mangas,
   mangaKeysSorted,
   mangaStates,
+  mangasImgs,
   onClick,
   onChangeLastRead,
 }) => (
@@ -52,7 +53,9 @@ const Mangas = ({
         }
         return (
           <tr key={mangaKey}>
-            <td>{manga.imgUrl}</td>
+            <td>
+              <img src={mangasImgs[mangaKey]} alt={manga.name} />
+            </td>
             <td>{manga.name}</td>
             <td>{lastReadSelector}</td>
             <td>{lastAvailable}</td>

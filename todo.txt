@@ -1,4 +1,8 @@
-Next time: load imgs from back (when back done)
+Next time: load imgs from back (when back done):
+    if not existing -> download and store
+
+Then -> Why so few mangas? 
+    -> Nice UX cf TV time
 
 Fonctionnalités:
 - Refresh num lastRead quand click (besoin (A) & (B))
@@ -8,3 +12,4 @@ Fonctionnalités:
 - Dockerfile
 - TUs
 - Genre Sonar
+- recherche de manga
