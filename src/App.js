@@ -1,18 +1,21 @@
-import React, { Component } from "react";
-import Mangas from "./Mangas";
-import axios from "axios";
-import { isEmptyArray } from "./ArrayUtils";
+import React, { Component } from "react"
+import Mangas from "./Mangas"
+import Mangas2 from "./Mangas2"
+import axios from "axios"
+import { isEmptyArray } from "./ArrayUtils"
+
+import "./App.css"
 
 class App extends Component {
   //regex aint perfect
-  REGEX_URL = /^https?:\/\/(www\.)?[-a-zA-Z0-9@:%._+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()!@:%_+.~#?&//=]*)$/;
-  REGEX_PATH_RSRC = /\/([-a-zA-Z0-9()!@:%_+.~#?&=]*\/?)*([-a-zA-Z0-9()!@:%_+.~#?&=]*\/?)/;
+  REGEX_URL = /^https?:\/\/(www\.)?[-a-zA-Z0-9@:%._+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()!@:%_+.~#?&//=]*)$/
+  REGEX_PATH_RSRC = /\/([-a-zA-Z0-9()!@:%_+.~#?&=]*\/?)*([-a-zA-Z0-9()!@:%_+.~#?&=]*\/?)/
 
   constructor(props) {
-    super(props);
+    super(props)
     const imgsResource = this.importAll(
       require.context("./resources/mangasImg", false, /\.(png|jpe?g|svg)$/)
-    );
+    )
     this.state = {
       error: null,
       isLoaded: false,
@@ -21,112 +24,112 @@ class App extends Component {
       mangasImgs: [],
       mangaKeysSorted: [],
       mangaStates: {},
-    };
+    }
   }
 
-  extractMangaKeysSorted = (mangaStates) => {
+  extractMangaKeysSorted = mangaStates => {
     // => to bind to this
-    return Object.keys(mangaStates);
-  };
+    return Object.keys(mangaStates)
+  }
 
   componentDidMount() {
     axios
       .get("http://localhost:8080/mangas")
-      .then((res) => res.data)
+      .then(res => res.data)
       .then(
-        (result) => {
-          let mangasImgs = this.loadImgs(result);
-          this.setState({ mangas: result, mangasImgs: mangasImgs });
+        result => {
+          let mangasImgs = this.loadImgs(result)
+          this.setState({ mangas: result, mangasImgs: mangasImgs })
         },
-        (error) => {
+        error => {
           this.setState({
             isLoaded: true,
             error: error,
-          });
+          })
         }
       )
       .then(
         axios
           .get("http://localhost:8080/mangaStates?sort=TO_READ")
-          .then((res) => res.data)
+          .then(res => res.data)
           .then(
-            (result) => {
-              let mangaKeysSorted = this.extractMangaKeysSorted(result);
+            result => {
+              let mangaKeysSorted = this.extractMangaKeysSorted(result)
               this.setState({
                 isLoaded: true,
                 mangaKeysSorted: mangaKeysSorted,
                 mangaStates: result,
-              });
+              })
             },
             // Remarque : il est important de traiter les erreurs ici
             // au lieu d'utiliser un bloc catch(), pour ne pas passer à la trappe
             // des exceptions provenant de réels bugs du composant.
-            (error) => {
+            error => {
               this.setState({
                 isLoaded: true,
                 error: error,
-              });
+              })
             }
           )
-      );
+      )
   }
 
   extractImgNameFromUrl(url) {
-    let res = "";
-    let match = url.match(this.REGEX_URL);
+    let res = ""
+    let match = url.match(this.REGEX_URL)
     if (isEmptyArray(match)) {
-      let imgPath = match[2];
-      let matchImg = imgPath.match(this.REGEX_PATH_RSRC);
+      let imgPath = match[2]
+      let matchImg = imgPath.match(this.REGEX_PATH_RSRC)
       if (isEmptyArray(matchImg)) {
-        res = matchImg[1];
+        res = matchImg[1]
       } else {
-        console.error("Path to img mal formée: {}", imgPath);
+        console.error("Path to img mal formée: {}", imgPath)
       }
     } else {
-      console.error("Url image mal formée: {}", url);
+      console.error("Url image mal formée: {}", url)
     }
-    return res;
+    return res
   }
 
-  handleOnClick = (event) => {
+  handleOnClick = event => {
     // => to bind to this
-    const { mangaStates } = this.state;
-    const indexMangaClicked = event.target.value;
-    const mangaStateClicked = mangaStates[indexMangaClicked];
-    const manga = mangaStateClicked.manga;
-    const lastRead = mangaStateClicked.lastAvailable;
+    const { mangaStates } = this.state
+    const indexMangaClicked = event.target.value
+    const mangaStateClicked = mangaStates[indexMangaClicked]
+    const manga = mangaStateClicked.manga
+    const lastRead = mangaStateClicked.lastAvailable
     axios.post(
       "http://localhost:8080/mangaStates/" + manga + "/lastRead/" + lastRead
-    );
-  };
+    )
+  }
 
   importAll(resource) {
-    let images = {};
+    let images = {}
     resource.keys().map((item, index) => {
-      images[item.replace("./", "")] = resource(item);
-    });
-    return images;
+      images[item.replace("./", "")] = resource(item)
+    })
+    return images
   }
 
   loadImgs(mangas) {
-    const imgsResource = this.state.imgsResource;
-    let res = {};
+    const imgsResource = this.state.imgsResource
+    let res = {}
     for (const mangaKey in mangas) {
-      let imgName = this.extractImgNameFromUrl(mangas[mangaKey].imgUrl);
-      let img = imgsResource[imgName];
-      res[mangaKey] = img;
+      let imgName = this.extractImgNameFromUrl(mangas[mangaKey].imgUrl)
+      let img = imgsResource[imgName]
+      res[mangaKey] = img
     }
-    return res;
+    return res
   }
 
-  onChangeLastRead = (event) => {
+  onChangeLastRead = event => {
     //Arrow to bind with 'this'
-    const lastRead = event.target.value;
-    const manga = event.target.getAttribute("manga");
+    const lastRead = event.target.value
+    const manga = event.target.getAttribute("manga")
     axios.post(
       "http://localhost:8080/mangaStates/" + manga + "/lastRead/" + lastRead
-    );
-  };
+    )
+  }
 
   render() {
     const {
@@ -136,16 +139,16 @@ class App extends Component {
       mangasImgs,
       mangaKeysSorted,
       mangaStates,
-    } = this.state;
-    console.log(mangas);
+    } = this.state
+    console.log(mangas)
     if (error) {
-      return <div>Erreur : {error.message}</div>;
+      return <div>Erreur : {error.message}</div>
     } else if (!isLoaded) {
-      return <div>Chargement…</div>;
+      return <div>Chargement…</div>
     } else {
       return (
         <div className="App">
-          <Mangas
+          <Mangas2
             mangas={mangas}
             mangasImgs={mangasImgs}
             mangaKeysSorted={mangaKeysSorted}
@@ -157,9 +160,9 @@ class App extends Component {
             "https://notImplementedURL.com/folder1/folder2/Ajin15.png"
           ) && <p>OK</p>}
         </div>
-      );
+      )
     }
   }
 }
 
-export default App;
+export default App
