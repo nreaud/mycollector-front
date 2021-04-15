@@ -1,14 +1,5 @@
-:root {
-  --color-primary:#E87700;
-  --color-primaryLight:#FFA100;
-  --color-secondary: #60C4F8;
-  --color-darker: #262626;
-  --color-dark: #343434;
-  --color-less-dark: #665C54;
-  --text-color: #F6E3D4;
-}
-
 .card {
+  position: relative;
   display: flex;
   flex-direction: row;
   padding-bottom: 12px;
@@ -27,6 +18,7 @@
   width: 500px;
   background-color: var(--color-less-dark);
   color: var(--color-dark);
+  border-radius: 10px;
 }
 
 .cardTitle {
@@ -40,7 +32,7 @@
 
 .cardTitle span {
   background-color: var(--color-dark);
-  color: var(--color-primary);
+  color: var(--text-color);
   border-radius: 10px;
   padding: 7px;
 }
@@ -52,4 +44,19 @@
   align-items: center;
   justify-content: center;
   color: var(--text-color);
+}
+
+.cardText .chapterNumber {
+  font-weight: bold
+}
+
+.toRead {
+  font-size: 22px;
+  left: 600px;
+  top:-5px;
+  position: absolute;
+  color: var(--text-color);
+  background-color: var(--color-primary);
+  border-radius: 7px;
+  padding: 5px;
 }

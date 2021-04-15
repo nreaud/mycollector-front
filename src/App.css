@@ -1,3 +1,14 @@
+:root {
+  --color-primary: #E87700;
+  --color-primaryLight: #FFA100;
+  --color-secondary: #60C4F8;
+  --color-darker: #262626;
+  --color-dark: #343434;
+  --color-less-dark: #665C54;
+  --text-color: #F6E3D4;
+}
+
 .App {
   background-color: var(--color-darker);
+  color: var(--text-color)
 }

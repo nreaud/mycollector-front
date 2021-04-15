@@ -17,6 +17,7 @@ const Mangas2 = ({
         mangaKey
         manga={mangas[mangaKey]}
         mangaState={mangaStates[mangaKey]}
+        key={mangaKey}
       />
     ))}
   </div>

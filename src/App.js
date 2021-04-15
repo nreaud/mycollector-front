@@ -1,9 +1,12 @@
-import React, { Component } from "react"
-import Mangas from "./Mangas"
-import Mangas2 from "./Mangas2"
+/** EXTERNAL LIBRARIES */
 import axios from "axios"
+import React, { Component } from "react"
+/** LOCAL COMPONENTS */
+import Mangas2 from "./Mangas2"
+import TopBar from "./TopBar"
+/** LOCAL METHODS */
 import { isEmptyArray } from "./ArrayUtils"
-
+/** LOCAL CSS */
 import "./App.css"
 
 class App extends Component {
@@ -140,7 +143,7 @@ class App extends Component {
       mangaKeysSorted,
       mangaStates,
     } = this.state
-    console.log(mangas)
+    console.log(mangaStates)
     if (error) {
       return <div>Erreur : {error.message}</div>
     } else if (!isLoaded) {
@@ -148,6 +151,7 @@ class App extends Component {
     } else {
       return (
         <div className="App">
+          <TopBar />
           <Mangas2
             mangas={mangas}
             mangasImgs={mangasImgs}
